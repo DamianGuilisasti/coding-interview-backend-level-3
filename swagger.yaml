@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  description: API Description
+  version: 1.0.0
+  title: ElDorado Documentation
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+paths:
+  /ping:
+    get:
+      tags:
+        - Items
+      description: Check if server is working fine
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Server is working"
+        "500":
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Server is NOT working"
+
+
+  /items:
+    post:
+      tags:
+        - Items
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Item 1
+                price:
+                  type: number
+                  example: 123
+              required:
+                - name
+                - price
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/Item"
+        500:
+          description: FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  message:
+                    type: string
+                    example: "Some error message"
+
+  /items/{id}:
+    get:
+      tags:
+        - Items
+      parameters:
+        - in: path
+          name: id        
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      docs:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Item"
+
+        500:
+          description: FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  message:
+                    type: string
+                    example: "Some error message"                      
+
+  /items:
+    get:
+      tags:
+        - Items
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      docs:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Item"
+
+        500:
+          description: FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  message:
+                    type: string
+                    example: "Some error message"     
+
+  /items/{id}:
+    delete:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Id of the Item
+      tags:
+        - Items
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 200
+                  deleted:
+                    type: boolean
+                    example: true
+        500:
+          description: FAILED
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 500
+                  message:
+                    type: string
+                    example: "Some error message"                      
+
+                                
+
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 635843727df525df27e4ffbf
+        name:
+          type: string
+          example: Item 1
+        price:
+          type: number
+          example: 10
+        
